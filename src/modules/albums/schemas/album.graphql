@@ -8,3 +8,8 @@ type Album {
     # genres: [Genre]
     image: String
 }
+
+type Query {
+    albums(limit: Int): [Album]
+    album(id: ID!): Album
+}

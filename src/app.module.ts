@@ -8,6 +8,7 @@ import { GenresModule } from './modules/genres/genres.module';
 import { TracksModule } from './modules/tracks/tracks.module';
 import { FavouritesModule } from './modules/favourites/favourites.module';
 import { AlbumsModule } from './modules/albums/albums.module';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -21,6 +22,10 @@ import { AlbumsModule } from './modules/albums/albums.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
+      definitions: {
+        path: join(process.cwd(), 'src/graphql.schema.ts'),
+        outputAs: 'class',
+      },
     }),
   ],
   controllers: [],
