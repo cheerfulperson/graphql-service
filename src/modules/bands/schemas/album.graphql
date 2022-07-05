@@ -1,3 +1,16 @@
+input MemberInput {
+    id: ID!
+    instruments: String
+}
+
+input BandInput {
+    name: String
+    origin: String
+    members: [MemberInput]
+    website: String
+    genres: [GenreInput]
+}
+
 type Member {
     id: ID!
     instruments: String
