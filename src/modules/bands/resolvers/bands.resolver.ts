@@ -8,12 +8,16 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { Band, BandInput } from 'src/graphql.schema';
+import { BandInput } from 'src/graphql.schema';
+import { GenresService } from 'src/modules/genres/services/genres.service';
 import { BandsService } from '../services/bands.service';
 
-@Resolver('Album')
+@Resolver('Band')
 export class BandsResolver {
-  constructor(private bandsService: BandsService) {}
+  constructor(
+    private bandsService: BandsService,
+    private genresSerives: GenresService,
+  ) {}
 
   @Query()
   async band(@Args('id') id: string) {
@@ -27,8 +31,16 @@ export class BandsResolver {
 
   @Resolver()
   @ResolveField()
-  async genres(@Parent() band: Band) {
-    return [];
+  async genres(@Parent() band: BandInput) {
+    const { genresIds } = band;
+    const genres = await Promise.allSettled(
+      genresIds.map((id) => {
+        return this.genresSerives.finedOneGenre(id);
+      }),
+    );
+    return genres
+      .filter((genre) => genre.status === 'fulfilled' && genre.value)
+      .map((genre) => (genre.status === 'fulfilled' ? genre.value : {}));
   }
 
   @Mutation()

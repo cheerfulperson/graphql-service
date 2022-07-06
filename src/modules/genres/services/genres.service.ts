@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
 import { GenreInput, Genres } from 'src/graphql.schema';
 import { QueryParams } from 'src/interfaces/query-params.model';
@@ -57,8 +61,14 @@ export class GenresService {
       const res = await this.client.put(`/${id}`, band, {
         headers: { Authorization: this.token },
       });
+      if (!res.data) {
+        throw new Error('Not Found');
+      }
       return res.data;
     } catch (error) {
+      if (error.message === 'Not Found') {
+        throw new NotFoundException();
+      }
       throw new InternalServerErrorException();
     }
   }

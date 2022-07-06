@@ -29,7 +29,7 @@ export class ArtistsResolver {
 
   @Mutation()
   @UseGuards(AuthGuard)
-  async updateAlbum(
+  async updateArtist(
     @Args('id') id: string,
     @Args('input') updatedArtist: ArtistInput,
   ) {
