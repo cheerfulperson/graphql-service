@@ -10,10 +10,10 @@
 export class AlbumInput {
     name?: Nullable<string>;
     released?: Nullable<number>;
-    artists?: Nullable<Nullable<ArtistInput>[]>;
-    bands?: Nullable<Nullable<BandInput>[]>;
-    tracks?: Nullable<Nullable<TrackInput>[]>;
-    genres?: Nullable<Nullable<GenreInput>[]>;
+    artistsIds?: Nullable<Nullable<string>[]>;
+    bandsIds?: Nullable<Nullable<string>[]>;
+    trackIds?: Nullable<Nullable<string>[]>;
+    genresIds?: Nullable<Nullable<string>[]>;
     image?: Nullable<string>;
 }
 
@@ -24,12 +24,12 @@ export class ArtistInput {
     birthDate?: Nullable<string>;
     birthPlace?: Nullable<string>;
     country?: Nullable<string>;
-    bands?: Nullable<Nullable<BandInput>[]>;
-    instruments?: Nullable<string>;
+    bandsIds?: Nullable<Nullable<string>[]>;
+    instruments?: Nullable<Nullable<string>[]>;
 }
 
 export class MemberInput {
-    id: string;
+    _id: string;
     instruments?: Nullable<string>;
 }
 
@@ -38,7 +38,7 @@ export class BandInput {
     origin?: Nullable<string>;
     members?: Nullable<Nullable<MemberInput>[]>;
     website?: Nullable<string>;
-    genres?: Nullable<Nullable<GenreInput>[]>;
+    genresIds?: Nullable<Nullable<string>[]>;
 }
 
 export class GenreInput {
@@ -58,7 +58,7 @@ export class TrackInput {
 }
 
 export class Album {
-    id: string;
+    _id: string;
     name?: Nullable<string>;
     released?: Nullable<number>;
     artists?: Nullable<Nullable<Artist>[]>;
@@ -72,7 +72,7 @@ export class Albums {
     items?: Nullable<Nullable<Album>[]>;
     limit?: Nullable<number>;
     offset?: Nullable<number>;
-    name?: Nullable<string>;
+    total?: Nullable<number>;
 }
 
 export abstract class IQuery {
@@ -80,11 +80,11 @@ export abstract class IQuery {
 
     abstract album(id: string): Nullable<Album> | Promise<Nullable<Album>>;
 
-    abstract artists(limit?: Nullable<number>): Nullable<Nullable<Artist>[]> | Promise<Nullable<Nullable<Artist>[]>>;
+    abstract artists(limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Artists> | Promise<Nullable<Artists>>;
 
     abstract artist(id: string): Nullable<Artist> | Promise<Nullable<Artist>>;
 
-    abstract bands(limit?: Nullable<number>): Nullable<Nullable<Band>[]> | Promise<Nullable<Nullable<Band>[]>>;
+    abstract bands(limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Bands> | Promise<Nullable<Bands>>;
 
     abstract band(id: string): Nullable<Band> | Promise<Nullable<Band>>;
 
@@ -92,7 +92,7 @@ export abstract class IQuery {
 
     abstract favourite(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
 
-    abstract genres(limit?: Nullable<number>): Nullable<Nullable<Genre>[]> | Promise<Nullable<Nullable<Genre>[]>>;
+    abstract genres(limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Genres> | Promise<Nullable<Genres>>;
 
     abstract genre(id: string): Nullable<Genre> | Promise<Nullable<Genre>>;
 
@@ -111,10 +111,28 @@ export abstract class IMutation {
     abstract updateAlbum(id: string, input?: Nullable<AlbumInput>): Nullable<Album> | Promise<Nullable<Album>>;
 
     abstract deleteAlbum(id: string): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract createArtist(input?: Nullable<ArtistInput>): Nullable<Artist> | Promise<Nullable<Artist>>;
+
+    abstract updateArtist(id: string, input?: Nullable<ArtistInput>): Nullable<Artist> | Promise<Nullable<Artist>>;
+
+    abstract deleteArtist(id: string): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract createBand(input?: Nullable<BandInput>): Nullable<Band> | Promise<Nullable<Band>>;
+
+    abstract updateBand(id: string, input?: Nullable<BandInput>): Nullable<Band> | Promise<Nullable<Band>>;
+
+    abstract deleteBand(id: string): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract createGenre(input?: Nullable<GenreInput>): Nullable<Genre> | Promise<Nullable<Genre>>;
+
+    abstract updateGenre(id: string, input?: Nullable<GenreInput>): Nullable<Genre> | Promise<Nullable<Genre>>;
+
+    abstract deleteGenre(id: string): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export class Artist {
-    id: string;
+    _id: string;
     firstName?: Nullable<string>;
     secondName?: Nullable<string>;
     middleName?: Nullable<string>;
@@ -122,21 +140,35 @@ export class Artist {
     birthPlace?: Nullable<string>;
     country?: Nullable<string>;
     bands?: Nullable<Nullable<Band>[]>;
-    instruments?: Nullable<string>;
+    instruments?: Nullable<Nullable<string>[]>;
+}
+
+export class Artists {
+    items?: Nullable<Nullable<Artist>[]>;
+    limit?: Nullable<number>;
+    offset?: Nullable<number>;
+    total?: Nullable<number>;
 }
 
 export class Member {
-    id: string;
+    _id: string;
     instruments?: Nullable<string>;
 }
 
 export class Band {
-    id: string;
+    _id: string;
     name?: Nullable<string>;
     origin?: Nullable<string>;
     members?: Nullable<Nullable<Member>[]>;
     website?: Nullable<string>;
     genres?: Nullable<Nullable<Genre>[]>;
+}
+
+export class Bands {
+    items?: Nullable<Nullable<Band>[]>;
+    limit?: Nullable<number>;
+    offset?: Nullable<number>;
+    total?: Nullable<number>;
 }
 
 export class Favourites {
@@ -149,11 +181,18 @@ export class Favourites {
 }
 
 export class Genre {
-    id: string;
+    _id: string;
     name?: Nullable<string>;
     description?: Nullable<string>;
     country?: Nullable<string>;
     year?: Nullable<number>;
+}
+
+export class Genres {
+    items?: Nullable<Nullable<Genre>[]>;
+    limit?: Nullable<number>;
+    offset?: Nullable<number>;
+    total?: Nullable<number>;
 }
 
 export class Track {

@@ -1,5 +1,5 @@
 input MemberInput {
-    id: ID!
+    _id: ID!
     instruments: String
 }
 
@@ -8,16 +8,16 @@ input BandInput {
     origin: String
     members: [MemberInput]
     website: String
-    genres: [GenreInput]
+    genresIds: [String]
 }
 
 type Member {
-    id: ID!
+    _id: ID!
     instruments: String
 }
 
 type Band {
-    id: ID!
+    _id: ID!
     name: String
     origin: String
     members: [Member]
@@ -25,7 +25,20 @@ type Band {
     genres: [Genre]
 }
 
+type Bands {
+    items: [Band]
+    limit: Int
+    offset: Int
+    total: Int
+}
+
 type Query {
-    bands(limit: Int): [Band]
+    bands(limit: Int, offset: Int): Bands
     band(id: ID!): Band
+}
+
+type Mutation {
+    createBand(input: BandInput): Band
+    updateBand(id: ID!, input: BandInput): Band
+    deleteBand(id: ID!): String
 }
