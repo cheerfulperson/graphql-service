@@ -50,11 +50,11 @@ export class GenreInput {
 
 export class TrackInput {
     title: string;
-    albums?: Nullable<Nullable<AlbumInput>[]>;
-    bands?: Nullable<Nullable<BandInput>[]>;
+    artistsIds?: Nullable<Nullable<string>[]>;
+    bandsIds?: Nullable<Nullable<string>[]>;
     duration?: Nullable<number>;
     released?: Nullable<number>;
-    genres?: Nullable<Nullable<GenreInput>[]>;
+    genresIds?: Nullable<Nullable<string>[]>;
 }
 
 export class Album {
@@ -96,7 +96,7 @@ export abstract class IQuery {
 
     abstract genre(id: string): Nullable<Genre> | Promise<Nullable<Genre>>;
 
-    abstract tracks(limit?: Nullable<number>): Nullable<Nullable<Track>[]> | Promise<Nullable<Nullable<Track>[]>>;
+    abstract tracks(limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Tracks> | Promise<Nullable<Tracks>>;
 
     abstract track(id: string): Nullable<Track> | Promise<Nullable<Track>>;
 
@@ -129,6 +129,12 @@ export abstract class IMutation {
     abstract updateGenre(id: string, input?: Nullable<GenreInput>): Nullable<Genre> | Promise<Nullable<Genre>>;
 
     abstract deleteGenre(id: string): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract createTrack(input?: Nullable<TrackInput>): Nullable<Track> | Promise<Nullable<Track>>;
+
+    abstract updateTrack(id: string, input?: Nullable<TrackInput>): Nullable<Track> | Promise<Nullable<Track>>;
+
+    abstract deleteTrack(id: string): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export class Artist {
@@ -196,13 +202,20 @@ export class Genres {
 }
 
 export class Track {
-    id: string;
+    _id: string;
     title: string;
-    albums?: Nullable<Nullable<Album>[]>;
+    artists?: Nullable<Nullable<Artist>[]>;
     bands?: Nullable<Nullable<Band>[]>;
     duration?: Nullable<number>;
     released?: Nullable<number>;
     genres?: Nullable<Nullable<Genre>[]>;
+}
+
+export class Tracks {
+    items?: Nullable<Nullable<Track>[]>;
+    limit?: Nullable<number>;
+    offset?: Nullable<number>;
+    total?: Nullable<number>;
 }
 
 export class User {

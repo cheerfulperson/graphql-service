@@ -12,6 +12,7 @@ import { AlbumInput } from 'src/graphql.schema';
 import { ArtistsService } from 'src/modules/artists/services/artists.service';
 import { BandsService } from 'src/modules/bands/services/bands.service';
 import { GenresService } from 'src/modules/genres/services/genres.service';
+import { TracksService } from 'src/modules/tracks/services/tracks.service';
 import { ResolverService } from 'src/shared/resolver.service';
 import { AlbumsService } from '../services/albums.service';
 
@@ -22,6 +23,7 @@ export class AlbumsResolver {
     private artistsService: ArtistsService,
     private bandsService: BandsService,
     private genresService: GenresService,
+    private trackesService: TracksService,
     private resolverService: ResolverService,
   ) {}
 
@@ -60,6 +62,14 @@ export class AlbumsResolver {
   async genres(@Parent() album: AlbumInput) {
     return this.resolverService.resolveField(album.genresIds, (id) =>
       this.genresService.finedOneGenre(id),
+    );
+  }
+
+  @Resolver()
+  @ResolveField()
+  async tracks(@Parent() album: AlbumInput) {
+    return this.resolverService.resolveField(album.trackIds, (id) =>
+      this.trackesService.finedOneTrack(id),
     );
   }
 

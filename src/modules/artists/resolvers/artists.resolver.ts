@@ -1,12 +1,25 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
+import {
+  Args,
+  Resolver,
+  Query,
+  Mutation,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { ArtistInput } from 'src/graphql.schema';
+import { BandsService } from 'src/modules/bands/services/bands.service';
+import { ResolverService } from 'src/shared/resolver.service';
 import { ArtistsService } from '../services/artists.service';
 
-@Resolver('Album')
+@Resolver('Artist')
 export class ArtistsResolver {
-  constructor(private albumsService: ArtistsService) {}
+  constructor(
+    private albumsService: ArtistsService,
+    private bandsService: BandsService,
+    private resolverService: ResolverService,
+  ) {}
 
   @Query()
   async artist(@Args('id') id: string) {
@@ -19,6 +32,14 @@ export class ArtistsResolver {
     @Args('offset') offset?: number,
   ) {
     return this.albumsService.finedAllArtists(limit, offset);
+  }
+
+  @Resolver()
+  @ResolveField()
+  async bands(@Parent() artist: ArtistInput) {
+    return this.resolverService.resolveField(artist.bandsIds, (id) =>
+      this.bandsService.finedOneBand(id),
+    );
   }
 
   @Mutation()

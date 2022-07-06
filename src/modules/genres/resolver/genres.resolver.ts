@@ -4,7 +4,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { GenreInput } from 'src/graphql.schema';
 import { GenresService } from '../services/genres.service';
 
-@Resolver('Album')
+@Resolver('Genre')
 export class GenresResolver {
   constructor(private genresService: GenresService) {}
 
