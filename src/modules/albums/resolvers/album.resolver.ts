@@ -11,6 +11,8 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { AlbumInput } from 'src/graphql.schema';
 import { ArtistsService } from 'src/modules/artists/services/artists.service';
 import { BandsService } from 'src/modules/bands/services/bands.service';
+import { GenresService } from 'src/modules/genres/services/genres.service';
+import { ResolverService } from 'src/shared/resolver.service';
 import { AlbumsService } from '../services/albums.service';
 
 @Resolver('Album')
@@ -19,6 +21,8 @@ export class AlbumsResolver {
     private albumsService: AlbumsService,
     private artistsService: ArtistsService,
     private bandsService: BandsService,
+    private genresService: GenresService,
+    private resolverService: ResolverService,
   ) {}
 
   @Query()
@@ -38,29 +42,25 @@ export class AlbumsResolver {
   @Resolver()
   @ResolveField()
   async artists(@Parent() album: AlbumInput) {
-    const { artistsIds } = album;
-    const artists = await Promise.allSettled(
-      artistsIds.map((id) => {
-        return this.artistsService.finedOneArtist(id);
-      }),
+    return this.resolverService.resolveField(album.artistsIds, (id) =>
+      this.artistsService.finedOneArtist(id),
     );
-    return artists
-      .filter((artist) => artist.status === 'fulfilled' && artist.value)
-      .map((artist) => (artist.status === 'fulfilled' ? artist.value : {}));
   }
 
   @Resolver()
   @ResolveField()
   async bands(@Parent() album: AlbumInput) {
-    const { bandsIds } = album;
-    const bands = await Promise.allSettled(
-      bandsIds.map((id) => {
-        return this.bandsService.finedOneBand(id);
-      }),
+    return this.resolverService.resolveField(album.bandsIds, (id) =>
+      this.bandsService.finedOneBand(id),
     );
-    return bands
-      .filter((band) => band.status === 'fulfilled' && band.value)
-      .map((band) => (band.status === 'fulfilled' ? band.value : {}));
+  }
+
+  @Resolver()
+  @ResolveField()
+  async genres(@Parent() album: AlbumInput) {
+    return this.resolverService.resolveField(album.genresIds, (id) =>
+      this.genresService.finedOneGenre(id),
+    );
   }
 
   @Mutation()
