@@ -1,7 +1,9 @@
 
 
 ## Installation
-
+1. Rename env.example to .env
+2. If needed apply changes in .env file. Each .env file have PORT variable (by default it's 4200 in each service)
+3. You can install node modules by:
 ```bash
 $ npm install
 ```
@@ -19,29 +21,16 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Using
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+1. Open GraphQL Playground:
+http://localhost:4200/graphql
+2. Follow this [link](https://github.com/cheerfulperson/graphql-service/blob/graphql-playground/playground.graphql) and open the file with all querys and mutations. Paste the code into GraphQL Playground.
+3. Making a "jwt" request to get a {{jwt token}} (if you are't registered, then register)
+4. Set headers in a tab `HTTP HEADERS` 
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+{
+  "Authorization": "Bearer {{jwt token}}"
+}
+```
+5. Check functionality
