@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
 import { Subject } from 'rxjs';
-import { User } from 'src/graphql.schema';
+import { Jwt, LoginUserInput, User, UserInput } from 'src/graphql.schema';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +21,39 @@ export class UsersService {
     });
   }
 
+  public async finedOneUser(id: string): Promise<User> {
+    try {
+      const res = await this.client.get(`/${id}`);
+      return res.data as User;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async login(loginInfo: LoginUserInput): Promise<Jwt> {
+    try {
+      const res = await this.client.post(`/login`, loginInfo);
+      if (!res.data) {
+        throw new Error('Not Found');
+      }
+      return res.data as Jwt;
+    } catch (error) {
+      if (error.message === 'Not Found') {
+        throw new NotFoundException();
+      }
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async register(regInfo: UserInput): Promise<User> {
+    try {
+      const res = await this.client.post('/register', regInfo);
+      return res.data as User;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
   public async verify(token: string): Promise<User> {
     const req = await this.client.post(
       '/verify',
@@ -24,9 +62,10 @@ export class UsersService {
         headers: { Authorization: token },
       },
     );
-    if (req.data) {
-      this.tokenSubject.next(token);
+    if (!req.data) {
+      throw new ForbiddenException();
     }
+    this.tokenSubject.next(token);
     return req.data as User;
   }
 }

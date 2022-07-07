@@ -41,6 +41,15 @@ export class BandInput {
     genresIds?: Nullable<Nullable<string>[]>;
 }
 
+export class FavouritesInput {
+    id: string;
+    userId?: Nullable<string>;
+    bandsIds?: Nullable<Nullable<string>[]>;
+    genresIds?: Nullable<Nullable<string>[]>;
+    artistsIds?: Nullable<Nullable<string>[]>;
+    tracksIds?: Nullable<Nullable<string>[]>;
+}
+
 export class GenreInput {
     name?: Nullable<string>;
     description?: Nullable<string>;
@@ -55,6 +64,19 @@ export class TrackInput {
     duration?: Nullable<number>;
     released?: Nullable<number>;
     genresIds?: Nullable<Nullable<string>[]>;
+}
+
+export class UserInput {
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
+    password: string;
+    email: string;
+    favouriteArtistIds?: Nullable<Nullable<string>[]>;
+}
+
+export class LoginUserInput {
+    email: string;
+    password: string;
 }
 
 export class Album {
@@ -88,9 +110,7 @@ export abstract class IQuery {
 
     abstract band(id: string): Nullable<Band> | Promise<Nullable<Band>>;
 
-    abstract favourites(limit?: Nullable<number>): Nullable<Nullable<Favourites>[]> | Promise<Nullable<Nullable<Favourites>[]>>;
-
-    abstract favourite(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+    abstract favourites(limit?: Nullable<number>): Nullable<Favourites> | Promise<Nullable<Favourites>>;
 
     abstract genres(limit?: Nullable<number>, offset?: Nullable<number>): Nullable<Genres> | Promise<Nullable<Genres>>;
 
@@ -100,9 +120,9 @@ export abstract class IQuery {
 
     abstract track(id: string): Nullable<Track> | Promise<Nullable<Track>>;
 
-    abstract users(limit?: Nullable<number>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
-
     abstract user(id: string): Nullable<User> | Promise<Nullable<User>>;
+
+    abstract jwt(input: LoginUserInput): Nullable<Jwt> | Promise<Nullable<Jwt>>;
 }
 
 export abstract class IMutation {
@@ -124,6 +144,22 @@ export abstract class IMutation {
 
     abstract deleteBand(id: string): Nullable<string> | Promise<Nullable<string>>;
 
+    abstract addTrackToFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract addBandToFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract addArtistToFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract addGenreToFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract removeTrackFromFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract removeBandFromFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract removeArtistFromFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
+    abstract removeGenreFromFavourites(id: string): Nullable<Favourites> | Promise<Nullable<Favourites>>;
+
     abstract createGenre(input?: Nullable<GenreInput>): Nullable<Genre> | Promise<Nullable<Genre>>;
 
     abstract updateGenre(id: string, input?: Nullable<GenreInput>): Nullable<Genre> | Promise<Nullable<Genre>>;
@@ -135,6 +171,8 @@ export abstract class IMutation {
     abstract updateTrack(id: string, input?: Nullable<TrackInput>): Nullable<Track> | Promise<Nullable<Track>>;
 
     abstract deleteTrack(id: string): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract register(input: UserInput): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export class Artist {
@@ -178,7 +216,7 @@ export class Bands {
 }
 
 export class Favourites {
-    id: string;
+    _id: string;
     userId?: Nullable<string>;
     bands?: Nullable<Nullable<Band>[]>;
     genres?: Nullable<Nullable<Genre>[]>;
@@ -218,12 +256,24 @@ export class Tracks {
     total?: Nullable<number>;
 }
 
+export class Jwt {
+    jwt?: Nullable<string>;
+}
+
 export class User {
-    id: string;
+    _id: string;
     firstName?: Nullable<string>;
-    secondName?: Nullable<string>;
+    lastName?: Nullable<string>;
     password?: Nullable<string>;
     email: string;
+}
+
+export class Verify {
+    _id: string;
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
+    email?: Nullable<string>;
+    iat?: Nullable<number>;
 }
 
 type Nullable<T> = T | null;
