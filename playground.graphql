@@ -1,0 +1,570 @@
+query user {
+  user(id: "62c1b8215fee8903e3cb6bb2") {
+    _id
+    lastName
+    firstName
+    email
+  }
+}
+
+query jwt {
+	jwt(input: {
+    email: "www@gmail.com"
+    password: "112345qwe"
+  }) {
+    jwt
+  }  
+}
+
+mutation register {
+  register(input: {
+    email: "www@gmail.com"
+    password: "112345qwe"
+    firstName: "Po"
+    lastName: "Panda"
+  }) {
+    lastName
+    email
+    firstName
+    password
+  }
+}
+
+query album {
+  album(id: "62c5633518558ff8282ab816") {
+    _id
+    name
+    released
+    artists {
+      _id
+      firstName
+      secondName
+    }
+    bands {
+      _id
+      name
+    }
+    tracks {
+      title
+    }
+    genres {
+      _id
+      name
+      description
+    }
+    image
+  }
+}
+
+query albums {
+  albums(limit: 5) {
+    items {
+      _id
+      name
+      artists {
+        _id
+        firstName
+        secondName
+        birthPlace
+        instruments
+      }
+      bands {
+        _id
+        name
+        origin
+        members {
+          _id
+          instruments
+        }
+      }
+      tracks {
+        title
+      }
+      genres {
+        _id
+        name
+        description
+      }
+    }
+  }
+}
+
+mutation createAlbum {
+  createAlbum(
+    input: {
+      name: "Jim"
+      released: 220222
+      artistsIds: ["62c55c36ef85744b8ae8d748", "62c552c4ef85744b8ae8d739"]
+    }
+  ) {
+    _id
+    name
+    artists {
+      firstName
+      secondName
+    }
+  }
+}
+
+mutation updateAlbum {
+  updateAlbum(
+    id: "62c5633518558ff8282ab816"
+    input: {
+      name: "Jim Noize"
+      bandsIds: ["62c564b2e3a98fe75e266087", "62c56b85e3a98fe75e26609c"]
+      artistsIds: ["62c55c36ef85744b8ae8d748", "62c552c4ef85744b8ae8d739"]
+      genresIds: ["62c57765dcfce42832502f6e"]
+      trackIds: ["62c5f9cb2200d4ca1e434ba0"]
+      image: "image"
+    }
+  ) {
+    _id
+    name
+    artists {
+      firstName
+      secondName
+    }
+    bands {
+      _id
+      name
+      origin
+    }
+    tracks {
+      title
+    }
+  }
+}
+
+mutation deleteAlbum {
+  deleteAlbum(id: "62c42b2018558ff8282ab77b")
+}
+
+query artist {
+  artist(id: "62c57bbaef85744b8ae8d792") {
+    _id
+    firstName
+    secondName
+    middleName
+    instruments
+    bands {
+      name
+      origin
+    }
+  }
+}
+
+query artists {
+  artists(limit: 20) {
+    items {
+      _id
+      firstName
+      secondName
+      middleName
+      instruments
+      bands {
+        name
+        origin
+      }
+    }
+    total
+  }
+}
+
+mutation createArtist {
+  createArtist(
+    input: {
+      firstName: "String"
+      secondName: "String"
+      middleName: "String"
+      birthPlace: "String"
+      country: "String"
+      bandsIds: ["62c564b2e3a98fe75e266087", "62c56b85e3a98fe75e26609c"]
+      instruments: ["Piano"]
+    }
+  ) {
+    _id
+    firstName
+    secondName
+    middleName
+    birthDate
+    birthPlace
+    bands {
+      _id
+      name
+      origin
+    }
+    instruments
+  }
+}
+
+mutation updateArtist {
+  updateArtist(
+    id: "62c57bbaef85744b8ae8d792"
+    input: {
+      firstName: "No Name"
+      secondName: "Name"
+      middleName: "Name"
+      birthPlace: "String"
+      country: "String"
+      bandsIds: ["62c564b2e3a98fe75e266087", "62c56b85e3a98fe75e26609c"]
+      instruments: ["Piano"]
+    }
+  ) {
+    firstName
+    secondName
+    middleName
+    birthDate
+    birthPlace
+    bands {
+      _id
+      name
+      origin
+    }
+    instruments
+  }
+}
+
+mutation deleteArtist {
+  deleteArtist(id: "62c55c36ef85744b8ae8d748")
+}
+
+query bands {
+  bands(limit: 10) {
+    items {
+      _id
+      name
+      origin
+      website
+      members {
+        _id
+        instruments
+      }
+      genres {
+        name
+        description
+        country
+      }
+    }
+    total
+  }
+}
+
+query band {
+  band(id: "62c56b85e3a98fe75e26609c") {
+    _id
+    name
+    origin
+    website
+    members {
+      _id
+      instruments
+    }
+    genres {
+      name
+      description
+      country
+    }
+  }
+}
+
+mutation createBand {
+  createBand(
+    input: {
+      name: "Rock Da"
+      origin: "None"
+      website: "www.none.com"
+      members: [{ _id: "62aef901cbabce5a0bdc0a28", instruments: "Drums" }]
+      genresIds: []
+    }
+  ) {
+    _id
+    name
+    origin
+    members {
+      _id
+      instruments
+    }
+  }
+}
+
+mutation updateBand {
+  updateBand(
+    id: "62c56bd2e3a98fe75e2660a0"
+    input: {
+      name: "Dency"
+      origin: "Pop"
+      members: [{ _id: "62aef901cbabce5a0bdc0a28", instruments: "Guitar" }]
+      genresIds: ["62c57765dcfce42832502f6e"]
+    }
+  ) {
+    _id
+    name
+    origin
+    members {
+      _id
+      instruments
+    }
+    genres {
+      _id
+      name
+      description
+    }
+  }
+}
+
+mutation deleteBand {
+  deleteBand(id: "62c56b61e3a98fe75e26609a")
+}
+
+query genre {
+  genre(id: "62c57765dcfce42832502f6e") {
+    _id
+    name
+    description
+    country
+    year
+  }
+}
+
+query genres {
+  genres(limit: 20, offset: 0) {
+    items {
+      _id
+      name
+      description
+      country
+      year
+    }
+    total
+  }
+}
+
+mutation createGenre {
+  createGenre(
+    input: {
+      name: "Metal"
+      description: "Descriptoin Metal"
+      country: "USA"
+      year: 2018
+    }
+  ) {
+    _id
+    name
+    description
+    country
+    year
+  }
+}
+
+mutation updateGenre {
+  updateGenre(
+    id: "62c57750dcfce42832502f6c"
+    input: {
+      name: "Metal"
+      description: "Belarus Metal"
+      country: "Belarus"
+      year: 2022
+    }
+  ) {
+    _id
+    name
+    description
+    country
+    year
+  }
+}
+
+mutation deleteGenre {
+  deleteGenre(id: "62c57750dcfce42832502f6c")
+}
+
+query track {
+  track(id: "") {
+    _id
+    title
+    artists {
+      _id
+      firstName
+    }
+    bands {
+      _id
+      name
+    }
+    duration
+    released
+    genres {
+      _id
+      name
+    }
+  }
+}
+
+query tracks {
+  tracks(limit: 20) {
+    items {
+      _id
+      title
+      artists {
+        _id
+        firstName
+      }
+      bands {
+        _id
+        name
+      }
+      duration
+      released
+      genres {
+        _id
+        name
+      }
+    }
+    total
+  }
+}
+
+mutation createTrack {
+  createTrack(
+    input: {
+      title: "Nothing"
+      artistsIds: ["62c552c3ef85744b8ae8d737"]
+      genresIds: ["62c57765dcfce42832502f6e"]
+      bandsIds: ["62c564b2e3a98fe75e266087"]
+      duration: 3
+      released: 200222
+    }
+  ) {
+    _id
+    title
+    artists {
+      firstName
+    }
+    genres {
+      name
+    }
+    bands {
+      name
+    }
+  }
+}
+
+mutation updateTrack {
+  updateTrack(
+    id: "62c5f3b92200d4ca1e434b62"
+    input: {
+      title: "Something"
+      artistsIds: ["62c55286ef85744b8ae8d735", "62c552c3ef85744b8ae8d737"]
+      genresIds: ["62c57765dcfce42832502f6e"]
+      bandsIds: ["62c564b2e3a98fe75e266087"]
+      duration: 2
+      released: 200222
+    }
+  ) {
+    _id
+    title
+    artists {
+      firstName
+    }
+    genres {
+      name
+    }
+    bands {
+      name
+    }
+  }
+}
+
+mutation deleteTrack {
+  deleteTrack(id: "62c5f3b92200d4ca1e434b62")
+}
+
+query favourites {
+  favourites {
+    _id
+    genres {
+      name
+    }
+    artists {
+      firstName
+    }
+    tracks {
+      title
+    }
+    bands {
+      name
+    }
+  }
+}
+
+mutation addTrackToFavourites {
+  addTrackToFavourites(id: "62c5f9cb2200d4ca1e434ba0") {
+		_id
+    tracks {
+      title
+    }
+  }
+}
+
+mutation addBandToFavourites {
+  addBandToFavourites(id: "62c564b2e3a98fe75e266087") {
+		_id
+    bands {
+      name
+    }
+  }
+}
+
+mutation addArtistToFavourites {
+  addArtistToFavourites(id: "62c55286ef85744b8ae8d735") {
+		_id
+    artists {
+      firstName
+    }
+  }
+}
+
+mutation addGenreToFavourites {
+  addGenreToFavourites(id: "62c57765dcfce42832502f6e") {
+		_id
+    genres {
+      name
+    }
+  }
+}
+
+mutation removeTrackFromFavourites {
+  removeTrackFromFavourites(id: "62c5f9cb2200d4ca1e434ba0"){
+		_id
+    tracks {
+      _id
+      title
+    }
+  }
+}
+
+mutation removeBandFromFavourites {
+  removeBandFromFavourites(id: ""){
+		_id
+    bands {
+      name
+    }
+  }
+}
+
+mutation removeArtistFromFavourites {
+  removeArtistFromFavourites(id: ""){
+		_id
+    artists {
+      firstName
+    }
+  }
+}
+
+mutation removeGenreFromFavourites {
+  removeGenreFromFavourites(id: ""){
+		_id
+    genres {
+      name
+    }
+  }
+}
